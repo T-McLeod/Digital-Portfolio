@@ -24,7 +24,7 @@ dist-ssr
 *.sw?
 
 # Python
-__pycache__/
+*/__pycache__/*
 *.py[cod]
 *$py.class
 *.so
@@ -51,7 +51,7 @@ MANIFEST
 # Django
 *.log
 local_settings.py
-db.sqlite3
+*/db.sqlite3
 db.sqlite3-journal
 /media
 /staticfiles

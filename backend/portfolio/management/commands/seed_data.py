@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from portfolio.models import Skill, Project, Experience
+from portfolio.models import Skill, Project, Experience, ProjectSkill
 
 
 class Command(BaseCommand):
@@ -9,6 +9,7 @@ class Command(BaseCommand):
         self.stdout.write('Seeding database...')
         
         # Clear existing data
+        ProjectSkill.objects.all().delete()
         Skill.objects.all().delete()
         Project.objects.all().delete()
         Experience.objects.all().delete()
@@ -63,61 +64,172 @@ class Command(BaseCommand):
             skills.append(skill)
             self.stdout.write(f'Created skill: {skill.name}')
         
-        # Create Projects
+        # Create Projects with new fields
         projects_data = [
             {
+                'slug': 'ecommerce-platform',
                 'title': 'E-Commerce Platform',
                 'description': 'Full-stack e-commerce application with payment integration, user authentication, and real-time inventory management.',
+                'long_description': '''A comprehensive e-commerce solution built with modern web technologies. This platform features a responsive frontend built with React, providing seamless shopping experience across all devices. The backend is powered by Node.js and Express, with MongoDB for flexible data storage.
+
+Key features include:
+- Secure payment processing via Stripe integration
+- Real-time inventory tracking and management
+- User authentication with JWT tokens
+- Shopping cart with persistent storage
+- Order tracking and history
+- Admin dashboard for product and order management
+- Email notifications for orders and shipping updates
+- Search and filtering capabilities
+- Product recommendations based on browsing history
+
+The application handles thousands of concurrent users and processes hundreds of transactions daily, demonstrating scalability and reliability.''',
                 'tags': ['React', 'Node.js', 'MongoDB', 'Stripe'],
                 'image_url': 'https://images.unsplash.com/photo-1557821552-17105176677c?w=800&q=80',
+                'gallery_images': [
+                    'https://images.unsplash.com/photo-1557821552-17105176677c?w=1200&q=80',
+                    'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=1200&q=80',
+                    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80'
+                ],
                 'live_url': 'https://example.com/ecommerce',
                 'github_url': 'https://github.com/example/ecommerce',
+                'is_featured': True,
                 'is_ai_feature': False,
                 'order': 1,
-                'skill_names': ['JavaScript', 'React', 'Node.js']
+                'skill_configs': [
+                    {'name': 'JavaScript', 'is_featured': True},
+                    {'name': 'React', 'is_featured': True},
+                    {'name': 'Node.js', 'is_featured': True}
+                ]
             },
             {
+                'slug': 'ai-cover-letter-generator',
                 'title': 'AI Cover Letter Generator',
                 'description': 'Intelligent cover letter generation using AI. Analyzes job descriptions and creates tailored, professional cover letters.',
+                'long_description': '''An innovative application leveraging artificial intelligence to help job seekers create personalized, professional cover letters. Built with Python and Django, this tool uses natural language processing and machine learning to analyze job descriptions and generate compelling cover letters that highlight relevant skills and experience.
+
+Features:
+- AI-powered content generation using OpenAI GPT
+- Job description analysis and keyword extraction
+- Personalized content based on user profile
+- Multiple writing styles and tones
+- Real-time editing and customization
+- Export to PDF and Word formats
+- Template library for different industries
+- Grammar and spell checking
+- Version history and saved drafts
+
+The application has helped thousands of users improve their job applications and has been featured in several career development blogs.''',
                 'tags': ['Python', 'AI', 'NLP', 'Django'],
                 'image_url': 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80',
+                'gallery_images': [
+                    'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80',
+                    'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=1200&q=80'
+                ],
                 'live_url': '',
                 'github_url': '',
+                'is_featured': True,
                 'is_ai_feature': True,
                 'order': 2,
-                'skill_names': ['Python', 'Django']
+                'skill_configs': [
+                    {'name': 'Python', 'is_featured': True},
+                    {'name': 'Django', 'is_featured': True}
+                ]
             },
             {
+                'slug': 'task-management-system',
                 'title': 'Task Management System',
                 'description': 'Collaborative project management tool with real-time updates, kanban boards, and team collaboration features.',
+                'long_description': '''A powerful project management platform designed for agile teams. Built with TypeScript and React for type-safe, maintainable code, this application provides real-time collaboration features using WebSockets and a robust PostgreSQL database for data persistence.
+
+Core functionality:
+- Kanban boards with drag-and-drop interface
+- Real-time updates across team members
+- Sprint planning and tracking
+- Time tracking and reporting
+- File attachments and comments
+- Team member roles and permissions
+- Customizable workflows
+- Email and push notifications
+- Activity timeline and audit logs
+- Integration with Slack and GitHub
+- Advanced filtering and search
+- Data export and reporting
+
+The platform serves teams of all sizes, from small startups to enterprise organizations, helping them stay organized and productive.''',
                 'tags': ['TypeScript', 'React', 'PostgreSQL', 'WebSocket'],
                 'image_url': 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80',
+                'gallery_images': [
+                    'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&q=80',
+                    'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1200&q=80',
+                    'https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=1200&q=80'
+                ],
                 'live_url': 'https://example.com/taskmanager',
                 'github_url': 'https://github.com/example/taskmanager',
+                'is_featured': True,
                 'is_ai_feature': False,
                 'order': 3,
-                'skill_names': ['TypeScript', 'React', 'PostgreSQL']
+                'skill_configs': [
+                    {'name': 'TypeScript', 'is_featured': True},
+                    {'name': 'React', 'is_featured': True},
+                    {'name': 'PostgreSQL', 'is_featured': True}
+                ]
             },
             {
+                'slug': 'devops-dashboard',
                 'title': 'DevOps Dashboard',
                 'description': 'Comprehensive monitoring dashboard for cloud infrastructure with real-time metrics, alerts, and deployment tracking.',
+                'long_description': '''A centralized monitoring and management platform for cloud infrastructure and DevOps operations. This dashboard aggregates data from multiple sources including AWS, Docker containers, and CI/CD pipelines to provide a comprehensive view of system health and performance.
+
+Key capabilities:
+- Real-time system metrics and performance monitoring
+- Custom alerts and notifications
+- Deployment tracking and rollback capabilities
+- Container orchestration overview
+- Log aggregation and analysis
+- Cost tracking and optimization recommendations
+- Service health checks and uptime monitoring
+- API endpoint testing and monitoring
+- Historical data and trend analysis
+- Team collaboration features
+- Customizable dashboards and widgets
+- Integration with popular DevOps tools
+
+Built with Python for backend processing, Docker for containerization, and React for a responsive, interactive frontend. The system is deployed on AWS using best practices for high availability and scalability.''',
                 'tags': ['Python', 'Docker', 'AWS', 'React'],
                 'image_url': 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
+                'gallery_images': [
+                    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80',
+                    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80',
+                    'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1200&q=80',
+                    'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&q=80'
+                ],
                 'live_url': 'https://example.com/devops',
                 'github_url': 'https://github.com/example/devops',
+                'is_featured': False,
                 'is_ai_feature': False,
                 'order': 4,
-                'skill_names': ['Python', 'Docker', 'AWS', 'React']
+                'skill_configs': [
+                    {'name': 'Python', 'is_featured': False},
+                    {'name': 'Docker', 'is_featured': False},
+                    {'name': 'AWS', 'is_featured': False},
+                    {'name': 'React', 'is_featured': False}
+                ]
             },
         ]
         
         for project_data in projects_data:
-            skill_names = project_data.pop('skill_names')
+            skill_configs = project_data.pop('skill_configs')
             project = Project.objects.create(**project_data)
             
-            # Add skills to project
-            project_skills = Skill.objects.filter(name__in=skill_names)
-            project.skills.set(project_skills)
+            # Create ProjectSkill relationships with is_featured flag
+            for skill_config in skill_configs:
+                skill = Skill.objects.get(name=skill_config['name'])
+                ProjectSkill.objects.create(
+                    project=project,
+                    skill=skill,
+                    is_featured=skill_config['is_featured']
+                )
             
             self.stdout.write(f'Created project: {project.title}')
         
