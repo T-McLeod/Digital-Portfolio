@@ -66,25 +66,9 @@ const Projects: React.FC = () => {
             setProjects(data);
           } catch (e) {
             setError(
-                <div className="text-center text-red-300 bg-slate-800 p-6 rounded-lg shadow-lg">
-                    <h3 className="font-bold text-lg mb-2 text-white">Connection Error</h3>
-                    <p className="mb-4">Failed to load projects. Please ensure the backend server is running.</p>
-                    <div className="text-left text-sm bg-slate-900 p-4 rounded-md">
-                        <p className="font-semibold mb-2">To start the backend server:</p>
-                        <code className="block whitespace-pre-wrap font-mono">
-                            1. Open a new terminal
-                            <br />
-                            2. cd backend
-                            <br />
-                            3. pip install -r requirements.txt
-                            <br />
-                            4. python manage.py migrate
-                            <br />
-                            5. python manage.py seed_data
-                            <br />
-                            6. python manage.py runserver
-                        </code>
-                    </div>
+                <div className="text-center text-red-400 bg-slate-800 p-6 rounded-lg shadow-lg">
+                    <h3 className="font-bold text-lg mb-2 text-white">Error</h3>
+                    <p>Failed to load projects. Could not connect to the server.</p>
                 </div>
             );
             console.error(e);
