@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { Project } from '../types';
 import AICoverLetterModal from './AICoverLetterModal';
 import { API_BASE_URL } from '../config';
@@ -9,11 +10,13 @@ const SectionTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 );
 
 const ProjectCard: React.FC<{ project: Project; onOpenAiModal: () => void }> = ({ project, onOpenAiModal }) => {
+    const navigate = useNavigate();
+    
     const handleCardClick = () => {
         if (project.isAiFeature) {
             onOpenAiModal();
-        } else if (project.liveUrl) {
-            window.open(project.liveUrl, '_blank');
+        } else {
+            navigate(`/projects/${project.slug}`);
         }
     };
 
@@ -29,6 +32,22 @@ const ProjectCard: React.FC<{ project: Project; onOpenAiModal: () => void }> = (
             <div className="p-6 flex flex-col flex-grow">
                 <h3 className="text-xl font-bold text-white mb-2">{project.title}</h3>
                 <p className="text-slate-400 mb-4 flex-grow">{project.description}</p>
+                
+                {/* Featured Skills Display */}
+                {project.skills && project.skills.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-4">
+                        {project.skills.map(skill => (
+                            <div key={skill.id} className="flex items-center gap-1 px-2 py-1 bg-slate-700/50 rounded-full">
+                                <div 
+                                    className="w-4 h-4 text-sky-400"
+                                    dangerouslySetInnerHTML={{ __html: skill.svgIcon }}
+                                />
+                                <span className="text-xs text-slate-300 font-medium">{skill.name}</span>
+                            </div>
+                        ))}
+                    </div>
+                )}
+                
                 <div className="flex flex-wrap gap-2 mb-4">
                     {project.tags.map(tag => (
                         <span key={tag} className="px-2 py-1 bg-slate-700 text-sky-300 text-xs font-semibold rounded-full">{tag}</span>
@@ -38,10 +57,7 @@ const ProjectCard: React.FC<{ project: Project; onOpenAiModal: () => void }> = (
                     {project.isAiFeature ? (
                         <button className="text-sky-400 hover:text-sky-300">Try It Out &rarr;</button>
                     ) : (
-                        <div className="flex gap-4">
-                           {project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="text-sky-400 hover:text-sky-300" onClick={(e) => e.stopPropagation()}>Live Demo &rarr;</a>}
-                           {project.githubUrl && <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-slate-300" onClick={(e) => e.stopPropagation()}>GitHub</a>}
-                        </div>
+                        <span className="text-sky-400 hover:text-sky-300">View Details &rarr;</span>
                     )}
                 </div>
             </div>
