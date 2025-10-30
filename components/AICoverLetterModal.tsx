@@ -1,6 +1,7 @@
 
 import React, { useState, useCallback } from 'react';
-import { generateCoverLetter } from '../services/geminiService';
+// import { generateCoverLetter } from '../services/geminiService';
+const generateCoverLetter = () => {}; // Placeholder for the actual import
 
 interface AICoverLetterModalProps {
   onClose: () => void;

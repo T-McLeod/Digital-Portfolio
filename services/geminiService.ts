@@ -2,11 +2,14 @@
 import { GoogleGenAI } from "@google/genai";
 import { PERSONAL_INFO } from '../data/personalInfo';
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+// Initialize AI client only if API key is available
+const ai = process.env.API_KEY ? new GoogleGenAI({ apiKey: process.env.API_KEY as string }) : null;
 
 export const generateCoverLetter = async (jobDescription: string): Promise<string> => {
-  if (!process.env.API_KEY) {
-    throw new Error("API key is missing. Please set the API_KEY environment variable.");
+  // Check if API key is missing and provide a warning
+  if (!process.env.API_KEY || !ai) {
+    console.warn("⚠️ Gemini API key is missing. Using demo mode.");
+    return getDemoCoverLetter(jobDescription);
   }
   
   const myDetails = `
@@ -41,4 +44,25 @@ export const generateCoverLetter = async (jobDescription: string): Promise<strin
     console.error("Error generating cover letter:", error);
     throw new Error("Failed to generate cover letter. The API call may have failed.");
   }
+};
+
+// Demo cover letter when API key is not available
+const getDemoCoverLetter = (jobDescription: string): string => {
+  const truncatedJob = jobDescription.substring(0, 100);
+  
+  return `Dear Hiring Manager,
+
+I am writing to express my strong interest in the position described in your job posting${truncatedJob ? ` regarding "${truncatedJob}..."` : ''}.
+
+As a ${PERSONAL_INFO.title}, I bring a comprehensive skill set in modern web development technologies including React, TypeScript, Next.js, Node.js, and Tailwind CSS. ${PERSONAL_INFO.long_bio}
+
+I am particularly excited about this opportunity because it aligns perfectly with my technical expertise and passion for creating innovative solutions. My experience has equipped me with the ability to deliver high-quality, scalable applications while collaborating effectively with cross-functional teams.
+
+I would welcome the opportunity to discuss how my background, skills, and enthusiasm can contribute to your team's success. Thank you for considering my application.
+
+Sincerely,
+${PERSONAL_INFO.name}
+
+---
+⚠️ DEMO MODE: This is a template cover letter. To generate AI-powered custom cover letters, please set the API_KEY environment variable with your Gemini API key.`;
 };

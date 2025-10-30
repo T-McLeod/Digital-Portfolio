@@ -120,7 +120,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Vite default port
     "http://127.0.0.1:5173",
+    "http://localhost:3000",  # Alternative port
+    "http://127.0.0.1:3000",
+    "http://localhost:3001",  # Alternative port
+    "http://127.0.0.1:3001",
 ]
+
+CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_METHODS = [
     'GET',
@@ -143,6 +149,25 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
+# CSRF settings
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:3001",
+    "http://127.0.0.1:3001",
+]
+
+# For development only - in production, remove this
+CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
+CSRF_COOKIE_HTTPONLY = False  # Allows JavaScript to read CSRF token
+CSRF_COOKIE_SAMESITE = 'Lax'
+
+# Session settings
+SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+SESSION_COOKIE_SAMESITE = 'Lax'
+
 
 # REST Framework settings
 REST_FRAMEWORK = {
@@ -155,4 +180,5 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [],  # No authentication required for public API
 }
