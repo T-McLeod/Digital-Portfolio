@@ -1,7 +1,7 @@
 
-import React from 'react';
-import { EXPERIENCE } from '../constants';
+import React, { useState, useEffect } from 'react';
 import type { ExperienceItem } from '../types';
+import { API_BASE_URL } from '../config';
 
 const SectionTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     <h2 className="text-3xl md:text-4xl font-bold text-white mb-12">{children}</h2>
@@ -28,14 +28,67 @@ const TimelineItem: React.FC<{ item: ExperienceItem }> = ({ item }) => (
 );
 
 const Experience: React.FC = () => {
+  const [experience, setExperience] = useState<ExperienceItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<React.ReactNode | null>(null);
+
+  useEffect(() => {
+    const fetchExperience = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/experience/`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setExperience(data);
+      } catch (e) {
+        setError(
+            <div className="text-center text-red-300 bg-slate-800 p-6 rounded-lg shadow-lg">
+                <h3 className="font-bold text-lg mb-2 text-white">Connection Error</h3>
+                <p className="mb-4">Failed to load work experience. Please ensure the backend server is running.</p>
+                <div className="text-left text-sm bg-slate-900 p-4 rounded-md">
+                    <p className="font-semibold mb-2">To start the backend server:</p>
+                    <code className="block whitespace-pre-wrap font-mono">
+                        1. Open a new terminal
+                        <br />
+                        2. cd backend
+                        <br />
+                        3. pip install -r requirements.txt
+                        <br />
+                        4. python manage.py migrate
+                        <br />
+                        5. python manage.py seed_data
+                        <br />
+                        6. python manage.py runserver
+                    </code>
+                </div>
+            </div>
+        );
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchExperience();
+  }, []);
+
   return (
     <section id="experience" className="py-20">
       <SectionTitle>Work Experience</SectionTitle>
-      <ol className="relative border-l border-slate-700">
-        {EXPERIENCE.map((item, index) => (
-          <TimelineItem key={index} item={item} />
-        ))}
-      </ol>
+      {loading && (
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-400 mx-auto"></div>
+        </div>
+      )}
+      {error && <div className="max-w-2xl mx-auto">{error}</div>}
+      {!loading && !error && (
+        <ol className="relative border-l border-slate-700">
+          {experience.map((item) => (
+            <TimelineItem key={item.id} item={item} />
+          ))}
+        </ol>
+      )}
     </section>
   );
 };

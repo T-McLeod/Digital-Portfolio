@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { PERSONAL_INFO } from '../constants';
+import { PERSONAL_INFO } from '../data/personalInfo';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();

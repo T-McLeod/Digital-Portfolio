@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { PERSONAL_INFO } from '../constants';
+import { PERSONAL_INFO } from '../data/personalInfo';
 
 const SectionTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 text-center">{children}</h2>
