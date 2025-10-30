@@ -1,5 +1,6 @@
 ﻿from django.contrib import admin
-from .models import Skill, Project, Experience, ProjectSkill
+from django.utils.html import format_html
+from .models import Skill, Project, Experience, ProjectSkill, GalleryImage
 
 
 @admin.register(Skill)
@@ -14,21 +15,37 @@ class ProjectSkillInline(admin.TabularInline):
     autocomplete_fields = ["skill"]
 
 
+class GalleryImageInline(admin.TabularInline):
+    model = GalleryImage
+    extra = 1
+    fields = ["image", "image_url", "order", "caption", "image_preview"]
+    readonly_fields = ["image_preview"]
+    
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" style="max-height: 100px; max-width: 200px;" />', obj.image.url)
+        elif obj.image_url:
+            return format_html('<img src="{}" style="max-height: 100px; max-width: 200px;" />', obj.image_url)
+        return "No image"
+    image_preview.short_description = "Preview"
+
+
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ["id", "title", "is_featured", "is_ai_feature", "order"]
+    list_display = ["id", "title", "is_featured", "is_ai_feature", "order", "main_image_preview"]
     list_filter = ["is_featured", "is_ai_feature"]
     search_fields = ["title", "description"]
     list_editable = ["order", "is_featured"]
     prepopulated_fields = {"slug": ("title",)}
-    inlines = [ProjectSkillInline]
+    inlines = [ProjectSkillInline, GalleryImageInline]
     
     fieldsets = (
         (None, {
             "fields": ("title", "slug", "description", "long_description")
         }),
-        ("Images", {
-            "fields": ("image_url", "gallery_images")
+        ("Main Image", {
+            "fields": ("image", "image_url", "main_image_display"),
+            "description": "Upload an image OR provide a URL. Upload takes priority."
         }),
         ("Links", {
             "fields": ("live_url", "github_url")
@@ -37,6 +54,39 @@ class ProjectAdmin(admin.ModelAdmin):
             "fields": ("tags", "is_featured", "is_ai_feature", "order")
         }),
     )
+    
+    readonly_fields = ["main_image_display"]
+    
+    def main_image_preview(self, obj):
+        """Small preview for list view"""
+        img_url = obj.get_image_url()
+        if img_url:
+            return format_html('<img src="{}" style="max-height: 50px; max-width: 100px;" />', img_url)
+        return "No image"
+    main_image_preview.short_description = "Image"
+    
+    def main_image_display(self, obj):
+        """Large preview for detail view"""
+        img_url = obj.get_image_url()
+        if img_url:
+            return format_html('<img src="{}" style="max-height: 300px; max-width: 500px;" />', img_url)
+        return "No image uploaded or URL provided"
+    main_image_display.short_description = "Current Image"
+
+
+@admin.register(GalleryImage)
+class GalleryImageAdmin(admin.ModelAdmin):
+    list_display = ["id", "project", "order", "image_preview"]
+    list_filter = ["project"]
+    list_editable = ["order"]
+    readonly_fields = ["image_preview"]
+    
+    def image_preview(self, obj):
+        img_url = obj.get_image_url()
+        if img_url:
+            return format_html('<img src="{}" style="max-height: 100px; max-width: 200px;" />', img_url)
+        return "No image"
+    image_preview.short_description = "Preview"
 
 
 @admin.register(Experience)

@@ -1,5 +1,5 @@
 ﻿from rest_framework import serializers
-from .models import Skill, Project, Experience, ProjectSkill
+from .models import Skill, Project, Experience, ProjectSkill, GalleryImage
 
 
 class SkillSerializer(serializers.ModelSerializer):
@@ -24,9 +24,9 @@ class ProjectSkillSerializer(serializers.ModelSerializer):
 
 class ProjectListSerializer(serializers.ModelSerializer):
     """Serializer for project list view (home page) - only featured skills"""
-    imageUrl = serializers.URLField(source="image_url")
-    liveUrl = serializers.URLField(source="live_url", allow_null=True)
-    githubUrl = serializers.URLField(source="github_url", allow_null=True)
+    imageUrl = serializers.SerializerMethodField()
+    liveUrl = serializers.URLField(source="live_url", allow_blank=True)
+    githubUrl = serializers.URLField(source="github_url", allow_blank=True)
     isAiFeature = serializers.BooleanField(source="is_ai_feature")
     isFeatured = serializers.BooleanField(source="is_featured")
     skills = serializers.SerializerMethodField()
@@ -34,6 +34,10 @@ class ProjectListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ["id", "title", "description", "tags", "imageUrl", "liveUrl", "githubUrl", "isAiFeature", "isFeatured", "skills", "slug"]
+    
+    def get_imageUrl(self, obj):
+        """Return uploaded image URL if exists, otherwise external URL"""
+        return obj.get_image_url()
     
     def get_skills(self, obj):
         """Return only featured skills for list view"""
@@ -43,11 +47,11 @@ class ProjectListSerializer(serializers.ModelSerializer):
 
 class ProjectDetailSerializer(serializers.ModelSerializer):
     """Serializer for project detail view - all skills"""
-    imageUrl = serializers.URLField(source="image_url")
-    galleryImages = serializers.JSONField(source="gallery_images")
+    imageUrl = serializers.SerializerMethodField()
+    galleryImages = serializers.SerializerMethodField()
     longDescription = serializers.CharField(source="long_description")
-    liveUrl = serializers.URLField(source="live_url", allow_null=True)
-    githubUrl = serializers.URLField(source="github_url", allow_null=True)
+    liveUrl = serializers.URLField(source="live_url", allow_blank=True)
+    githubUrl = serializers.URLField(source="github_url", allow_blank=True)
     isAiFeature = serializers.BooleanField(source="is_ai_feature")
     isFeatured = serializers.BooleanField(source="is_featured")
     skills = serializers.SerializerMethodField()
@@ -59,6 +63,22 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
             "imageUrl", "galleryImages", "liveUrl", "githubUrl", 
             "isAiFeature", "isFeatured", "skills", "slug"
         ]
+    
+    def get_imageUrl(self, obj):
+        """Return uploaded image URL if exists, otherwise external URL"""
+        return obj.get_image_url()
+    
+    def get_galleryImages(self, obj):
+        """Return gallery images from both uploaded files and URLs"""
+        # First, get images from GalleryImage model
+        gallery_objects = obj.gallery.all()
+        images = [img.get_image_url() for img in gallery_objects if img.get_image_url()]
+        
+        # If no gallery objects exist, fall back to legacy gallery_images JSON field
+        if not images and hasattr(obj, 'gallery_images') and obj.gallery_images:
+            images = obj.gallery_images
+        
+        return images
     
     def get_skills(self, obj):
         """Return all skills with featured flag for detail view"""

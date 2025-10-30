@@ -31,8 +31,11 @@ class Project(models.Model):
     description = models.TextField(help_text="Short description for card view")
     long_description = models.TextField(blank=True, help_text="Detailed description for project page")
     tags = models.JSONField(default=list, help_text="List of technology tags")
-    image_url = models.URLField(max_length=500, help_text="Main project image")
-    gallery_images = models.JSONField(default=list, help_text="List of image URLs for slideshow")
+    
+    # Image handling: Upload takes priority over URL
+    image = models.ImageField(upload_to='projects/', blank=True, null=True, help_text="Upload main project image")
+    image_url = models.URLField(max_length=500, blank=True, help_text="Or provide image URL (used if no upload)")
+    
     live_url = models.URLField(max_length=500, blank=True, null=True)
     github_url = models.URLField(max_length=500, blank=True, null=True)
     is_ai_feature = models.BooleanField(default=False)
@@ -50,6 +53,33 @@ class Project(models.Model):
     def get_featured_skills(self):
         """Get only featured skills for this project"""
         return self.skills.filter(projectskill__is_featured=True)
+    
+    def get_image_url(self):
+        """Return uploaded image URL if exists, otherwise external URL"""
+        if self.image:
+            return self.image.url
+        return self.image_url
+
+
+class GalleryImage(models.Model):
+    """Gallery images for project slideshow"""
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='gallery')
+    image = models.ImageField(upload_to='gallery/', help_text="Upload gallery image")
+    image_url = models.URLField(max_length=500, blank=True, help_text="Or provide image URL")
+    order = models.IntegerField(default=0, help_text="Display order in gallery")
+    caption = models.CharField(max_length=200, blank=True, help_text="Optional image caption")
+    
+    class Meta:
+        ordering = ['order', 'id']
+    
+    def __str__(self):
+        return f"{self.project.title} - Gallery Image {self.order}"
+    
+    def get_image_url(self):
+        """Return uploaded image URL if exists, otherwise external URL"""
+        if self.image:
+            return self.image.url
+        return self.image_url
 
 
 class Experience(models.Model):
