@@ -1,0 +1,5 @@
+{
+  "name": "AI-Powered Developer Portfolio",
+  "description": "A sleek, modern portfolio website for a senior frontend developer, featuring sections for skills, projects, and work experience. It includes an interactive AI-powered cover letter generator using the Gemini API to showcase cutting-edge skills.",
+  "requestFramePermissions": []
+}
