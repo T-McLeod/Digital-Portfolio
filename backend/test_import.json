@@ -1,0 +1,48 @@
+{
+  "projects": [
+    {
+      "title": "Test Import Project",
+      "slug": "test-import-project",
+      "description": "This is a test project created via bulk import",
+      "long_description": "This project demonstrates the bulk import functionality.\n\nFeatures:\n- Automatic skill creation\n- Gallery image support\n- Featured skill flags\n\nThis is a multi-paragraph description to test formatting.",
+      "tags": ["Testing", "Bulk Import", "Django"],
+      "image": {
+        "type": "url",
+        "value": "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=800&q=80"
+      },
+      "gallery_images": [
+        {
+          "type": "url",
+          "value": "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=1200&q=80",
+          "caption": "Test Gallery Image 1",
+          "order": 0
+        },
+        {
+          "type": "url",
+          "value": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80",
+          "caption": "Test Gallery Image 2",
+          "order": 1
+        }
+      ],
+      "live_url": "https://test.example.com",
+      "github_url": "https://github.com/test/project",
+      "is_featured": false,
+      "is_ai_feature": false,
+      "order": 999,
+      "skills": [
+        {
+          "name": "Python",
+          "is_featured": true
+        },
+        {
+          "name": "Django",
+          "is_featured": true
+        },
+        {
+          "name": "PostgreSQL",
+          "is_featured": false
+        }
+      ]
+    }
+  ]
+}
