@@ -24,7 +24,8 @@ dist-ssr
 *.sw?
 
 # Python
-*/__pycache__/*
+__pycache__/
+*/__pycache__/
 *.py[cod]
 *$py.class
 *.so
@@ -51,9 +52,12 @@ MANIFEST
 # Django
 *.log
 local_settings.py
-*/db.sqlite3
+db.sqlite3
+*.sqlite3
 db.sqlite3-journal
+media/
 /media
+staticfiles/
 /staticfiles
 
 # Django migrations (optional - uncomment if you want to ignore migrations)
