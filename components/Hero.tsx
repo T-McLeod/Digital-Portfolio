@@ -1,5 +1,6 @@
 import React from 'react';
 import { PERSONAL_INFO } from '../data/personalInfo';
+import { HERO_PORTRAIT, HERO_PORTRAIT_FALLBACK } from '../data/assets';
 
 const Hero: React.FC = () => {
   return (
@@ -33,11 +34,17 @@ const Hero: React.FC = () => {
         <div className="order-1 md:order-2 flex justify-center items-center">
             <div className="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96">
                 <div className="absolute inset-0 bg-gradient-to-br from-sky-500 to-slate-800 rounded-full blur-2xl opacity-50 animate-pulse-slow"></div>
-                <img 
-                    src="https://picsum.photos/seed/hero-portrait/500/500" 
-                    alt="Portrait of Alex Doe"
-                    className="relative rounded-full w-full h-full object-cover shadow-2xl ring-4 ring-slate-800/50"
-                />
+        <img
+          src={HERO_PORTRAIT}
+          alt="Portrait of Tanner McLeod"
+          className="relative rounded-full w-full h-full object-cover shadow-2xl ring-4 ring-slate-800/50"
+          onError={(e) => {
+            const el = e.currentTarget as HTMLImageElement;
+            if (el.src !== HERO_PORTRAIT_FALLBACK) {
+              el.src = HERO_PORTRAIT_FALLBACK;
+            }
+          }}
+        />
             </div>
         </div>
       </div>
