@@ -28,7 +28,7 @@ jobs:
         run: |
           npm install
           # Replace 'npx webpack' with your actual build command (e.g., 'npm run build')
-          npx webpack 
+          npm run build 
 
       - name: Deploy to GitHub Pages Repository
         uses: peaceiris/actions-gh-pages@v3
