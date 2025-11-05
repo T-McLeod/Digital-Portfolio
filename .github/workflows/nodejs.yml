@@ -33,13 +33,8 @@ jobs:
       - name: Deploy to GitHub Pages Repository
         uses: peaceiris/actions-gh-pages@v3
         with:
-          # This token MUST have 'repo' scope and be stored as a secret in the source repo
           personal_token: ${{ secrets.DEPLOY_TOKEN }}
-          # The target repository URL: replace myusername/myusername.github.io
-          external_repository: myusername/myusername.github.io 
-          # The branch to push the build files to in the target repo
+          external_repository: T-McLeod/T-McLeod.github.io 
           publish_branch: main 
-          # The folder containing the built static files (e.g., build, dist)
           publish_dir: ./dist 
-          # A clear commit message for the deployment
           commit_message: ${{ github.event.head_commit.message }} (Deployed via GitHub Actions)
