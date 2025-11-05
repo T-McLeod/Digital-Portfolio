@@ -1,0 +1,45 @@
+name: NodeJS Build and Deploy to Pages
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # Focus on one stable Node version for deployment
+    strategy:
+      matrix:
+        node-version: [20.x] 
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies and Build
+        run: |
+          npm install
+          # Replace 'npx webpack' with your actual build command (e.g., 'npm run build')
+          npx webpack 
+
+      - name: Deploy to GitHub Pages Repository
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          # This token MUST have 'repo' scope and be stored as a secret in the source repo
+          personal_token: ${{ secrets.DEPLOY_TOKEN }}
+          # The target repository URL: replace myusername/myusername.github.io
+          external_repository: myusername/myusername.github.io 
+          # The branch to push the build files to in the target repo
+          publish_branch: main 
+          # The folder containing the built static files (e.g., build, dist)
+          publish_dir: ./dist 
+          # A clear commit message for the deployment
+          commit_message: ${{ github.event.head_commit.message }} (Deployed via GitHub Actions)
