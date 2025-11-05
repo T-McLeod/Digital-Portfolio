@@ -175,18 +175,39 @@ CORS_ALLOW_HEADERS = [
 
 # CSRF settings
 CSRF_TRUSTED_ORIGINS = os.getenv(
-    'CSRF_TRUSTED_ORIGINS',
-    'http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://127.0.0.1:3001'
+    'CSRF_TRUSTED_ORIGINS'
 ).split(',')
 
-# For development only - in production, remove this
-CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE', 'False') == 'True'
-CSRF_COOKIE_HTTPONLY = False  # Allows JavaScript to read CSRF token
-CSRF_COOKIE_SAMESITE = 'Lax'
+print("CSRF_TRUSTED_ORIGINS:", CSRF_TRUSTED_ORIGINS)
+
+# When running behind a TLS-terminating proxy (host nginx), tell Django
+# to trust the X-Forwarded-Proto header so it knows the original request
+# scheme. nginx is already configured to set X-Forwarded-Proto.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Cookie security: when DEBUG is False default to secure cookies. You can
+# still override via environment variables if necessary.
+CSRF_COOKIE_SECURE = os.getenv(
+    'CSRF_COOKIE_SECURE', 'True' if not DEBUG else 'False'
+) == 'True'
+CSRF_COOKIE_HTTPONLY = False  # Allows JavaScript (SPA) to read CSRF token
+CSRF_COOKIE_SAMESITE = os.getenv('CSRF_COOKIE_SAMESITE', 'Lax')
 
 # Session settings
-SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'False') == 'True'
-SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SECURE = os.getenv(
+    'SESSION_COOKIE_SECURE', 'True' if not DEBUG else 'False'
+) == 'True'
+SESSION_COOKIE_SAMESITE = os.getenv('SESSION_COOKIE_SAMESITE', 'Lax')
+
+# Optional: redirect HTTP to HTTPS when running in production. Default to
+# enabled when DEBUG is False, but controllable via environment variable.
+SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'True' if not DEBUG else 'False') == 'True'
+
+# HSTS (only enable in production after validating TLS). Set to 0 by
+# default and allow override via env.
+SECURE_HSTS_SECONDS = int(os.getenv('SECURE_HSTS_SECONDS', '0'))
+SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv('SECURE_HSTS_INCLUDE_SUBDOMAINS', 'False') == 'True'
+SECURE_HSTS_PRELOAD = os.getenv('SECURE_HSTS_PRELOAD', 'False') == 'True'
 
 
 # REST Framework settings
