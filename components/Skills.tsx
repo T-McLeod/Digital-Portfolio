@@ -9,7 +9,7 @@ const SectionTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
 const SkillCard: React.FC<{ skill: Skill }> = ({ skill }) => (
   <div className="flex flex-col items-center justify-center p-6 bg-slate-800 rounded-lg shadow-lg hover:shadow-sky-500/20 transition-all duration-300 transform hover:-translate-y-2">
-    <div className="h-8 w-8 text-sky-400" dangerouslySetInnerHTML={{ __html: skill.svgIcon }} />
+    <div className="h-14 w-14 text-sky-400" dangerouslySetInnerHTML={{ __html: skill.svgIcon }} />
     <p className="mt-4 text-lg font-semibold text-white">{skill.name}</p>
   </div>
 );
