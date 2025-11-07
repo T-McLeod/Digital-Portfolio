@@ -37,7 +37,12 @@ class ProjectListSerializer(serializers.ModelSerializer):
     
     def get_imageUrl(self, obj):
         """Return uploaded image URL if exists, otherwise external URL"""
-        return obj.get_image_url()
+        request = self.context.get('request') if hasattr(self, 'context') else None
+        if obj.image:
+            if request is not None:
+                return request.build_absolute_uri(obj.image.url)
+            return obj.image.url
+        return obj.image_url
     
     def get_skills(self, obj):
         """Return only featured skills for list view"""
@@ -66,17 +71,38 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
     
     def get_imageUrl(self, obj):
         """Return uploaded image URL if exists, otherwise external URL"""
-        return obj.get_image_url()
+        request = self.context.get('request') if hasattr(self, 'context') else None
+        if obj.image:
+            if request is not None:
+                return request.build_absolute_uri(obj.image.url)
+            return obj.image.url
+        return obj.image_url
     
     def get_galleryImages(self, obj):
         """Return gallery images from both uploaded files and URLs"""
         # First, get images from GalleryImage model
         gallery_objects = obj.gallery.all()
-        images = [img.get_image_url() for img in gallery_objects if img.get_image_url()]
+        # Build absolute URIs for any uploaded images
+        request = self.context.get('request') if hasattr(self, 'context') else None
+        images = []
+        for img in gallery_objects:
+            url = img.get_image_url()
+            if not url:
+                continue
+            # img.get_image_url() returns a relative path for uploaded files
+            if img.image and request is not None:
+                images.append(request.build_absolute_uri(img.image.url))
+            else:
+                images.append(url)
         
         # If no gallery objects exist, fall back to legacy gallery_images JSON field
         if not images and hasattr(obj, 'gallery_images') and obj.gallery_images:
-            images = obj.gallery_images
+            # legacy gallery_images may already include absolute URLs or relative
+            # paths; if relative and we have a request, make them absolute.
+            if request is not None:
+                images = [request.build_absolute_uri(u) if u.startswith('/') else u for u in obj.gallery_images]
+            else:
+                images = obj.gallery_images
         
         return images
     
