@@ -30,6 +30,18 @@ jobs:
           # Replace 'npx webpack' with your actual build command (e.g., 'npm run build')
           npm run build 
 
+      - name: Ensure CNAME file for GitHub Pages
+        # Write the custom domain into the publish directory so it persists
+        # NOTE: Add a repo secret named CUSTOM_DOMAIN with value like "example.com"
+        run: |
+          if [ -n "${{ secrets.CUSTOM_DOMAIN }}" ]; then
+            mkdir -p ./dist
+            echo "${{ secrets.CUSTOM_DOMAIN }}" > ./dist/CNAME
+            echo "Wrote CNAME: ${{ secrets.CUSTOM_DOMAIN }}"
+          else
+            echo "No CUSTOM_DOMAIN secret set; skipping CNAME creation."
+          fi
+
       - name: Deploy to GitHub Pages Repository
         uses: peaceiris/actions-gh-pages@v3
         with:
@@ -37,4 +49,5 @@ jobs:
           external_repository: T-McLeod/T-McLeod.github.io 
           publish_branch: main 
           publish_dir: ./dist 
+          cname: ${{ secrets.CUSTOM_DOMAIN }}
           commit_message: ${{ github.event.head_commit.message }} (Deployed via GitHub Actions)
