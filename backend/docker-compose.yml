@@ -5,6 +5,7 @@ services:
     image: postgres:16-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
     environment:
       - POSTGRES_DB=${DB_NAME:-portfolio_db}
       - POSTGRES_USER=${DB_USER:-portfolio_user}
@@ -27,6 +28,7 @@ services:
       - ./staticfiles:/app/staticfiles
     ports:
       - "8000:8000"
+    restart: unless-stopped
     environment:
       - SECRET_KEY=${SECRET_KEY:-django-insecure-dev-key-change-in-production}
       - DEBUG=${DEBUG:-True}
