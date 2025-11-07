@@ -42,7 +42,7 @@ const Header: React.FC = () => {
         <div className="flex items-center justify-between h-20">
           <div className="flex-shrink-0">
             <a href="#" className="text-2xl font-bold text-white">
-              Alex Doe
+              Tanner McLeod
             </a>
           </div>
           <div className="hidden md:block">
