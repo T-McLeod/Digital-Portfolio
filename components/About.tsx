@@ -15,7 +15,7 @@ const About: React.FC = () => {
         <div className="md:col-span-2">
       <img
         src={PROFILE_PIC}
-        alt="Alex Doe"
+        alt="Tanner McLeod"
         className="rounded-lg shadow-lg w-full h-auto object-cover"
         onError={(e) => {
           const el = e.currentTarget as HTMLImageElement;
