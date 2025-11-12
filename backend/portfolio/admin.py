@@ -5,6 +5,7 @@ from .models import Skill, Project, Experience, ProjectSkill, GalleryImage
 
 @admin.register(Skill)
 class SkillAdmin(admin.ModelAdmin):
+    list_display_links = ["name"]
     list_display = ["id", "name", "order", "is_featured"]
     search_fields = ["name"]
     list_editable = ["order", "is_featured"]
@@ -33,6 +34,7 @@ class GalleryImageInline(admin.TabularInline):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
+    list_display_links = ["title"]
     list_display = ["id", "title", "is_featured", "is_ai_feature", "order", "main_image_preview"]
     list_filter = ["is_featured", "is_ai_feature"]
     search_fields = ["title", "description"]
@@ -92,6 +94,7 @@ class GalleryImageAdmin(admin.ModelAdmin):
 
 @admin.register(Experience)
 class ExperienceAdmin(admin.ModelAdmin):
+    list_display_links = ["role"]
     list_display = ["id", "role", "company", "period", "order"]
     search_fields = ["role", "company"]
     filter_horizontal = ["skills"]
