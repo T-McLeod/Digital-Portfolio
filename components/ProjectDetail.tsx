@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 import type { Project } from '../types';
 import { API_BASE_URL } from '../config';
 
@@ -203,11 +204,27 @@ const ProjectDetail: React.FC = () => {
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">About This Project</h2>
             <div className="bg-slate-800 rounded-lg p-6 md:p-8 shadow-xl">
               <div className="prose prose-invert max-w-none">
-                {project.longDescription.split('\n\n').map((paragraph, index) => (
-                  <p key={index} className="text-slate-300 mb-4 leading-relaxed whitespace-pre-wrap">
-                    {paragraph}
-                  </p>
-                ))}
+                <ReactMarkdown
+                  components={{
+                    h1: ({node, ...props}) => <h1 className="text-2xl font-bold text-white mt-6 mb-4" {...props} />,
+                    h2: ({node, ...props}) => <h2 className="text-xl font-bold text-white mt-5 mb-3" {...props} />,
+                    h3: ({node, ...props}) => <h3 className="text-lg font-semibold text-white mt-4 mb-2" {...props} />,
+                    p: ({node, ...props}) => <p className="text-slate-300 mb-4" {...props} />,
+                    ul: ({node, ...props}) => <ul className="list-disc list-inside mb-4 text-slate-300 space-y-1" {...props} />,
+                    ol: ({node, ...props}) => <ol className="list-decimal list-inside mb-4 text-slate-300 space-y-1" {...props} />,
+                    li: ({node, ...props}) => <li className="text-slate-300" {...props} />,
+                    a: ({node, ...props}) => <a className="text-sky-400 hover:text-sky-300 underline" target="_blank" rel="noopener noreferrer" {...props} />,
+                    code: ({node, inline, ...props}: any) => 
+                      inline ? (
+                        <code className="bg-slate-700 text-sky-300 px-1.5 py-0.5 rounded text-sm" {...props} />
+                      ) : (
+                        <code className="block bg-slate-700 text-sky-300 p-4 rounded-lg mb-4 overflow-x-auto" {...props} />
+                      ),
+                    blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-sky-500 pl-4 italic text-slate-400 mb-4" {...props} />,
+                  }}
+                >
+                  {project.longDescription}
+                </ReactMarkdown>
               </div>
             </div>
           </div>
