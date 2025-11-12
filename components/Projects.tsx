@@ -25,8 +25,8 @@ const ProjectCard: React.FC<{ project: Project; onOpenAiModal: () => void }> = (
             className="group rounded-lg overflow-hidden bg-slate-800 shadow-lg hover:shadow-sky-500/20 transition-all duration-300 transform hover:-translate-y-2 flex flex-col cursor-pointer"
             onClick={handleCardClick}
         >
-            <div className="relative">
-                <img src={project.imageUrl} alt={project.title} className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" />
+            <div className="relative bg-slate-900">
+                <img src={project.imageUrl} alt={project.title} className="w-full h-48 object-contain transition-transform duration-300 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-all duration-300"></div>
             </div>
             <div className="p-6 flex flex-col flex-grow">

@@ -150,7 +150,7 @@ const ProjectDetail: React.FC = () => {
               <img
                 src={project.galleryImages[currentImageIndex]}
                 alt={`${project.title} screenshot ${currentImageIndex + 1}`}
-                className="w-full h-[400px] md:h-[500px] object-cover"
+                className="w-full h-[400px] md:h-[500px] object-contain"
               />
               
               {project.galleryImages.length > 1 && (
