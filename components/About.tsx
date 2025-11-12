@@ -13,17 +13,19 @@ const About: React.FC = () => {
       <SectionTitle>About Me</SectionTitle>
       <div className="grid md:grid-cols-5 gap-10 items-center">
         <div className="md:col-span-2">
-      <img
-        src={PROFILE_PIC}
-        alt="Tanner McLeod"
-        className="rounded-lg shadow-lg w-full h-auto object-cover"
-        onError={(e) => {
-          const el = e.currentTarget as HTMLImageElement;
-          if (el.src !== PROFILE_PIC_FALLBACK) {
-            el.src = PROFILE_PIC_FALLBACK;
-          }
-        }}
-      />
+          <img
+            src={PROFILE_PIC}
+            alt="Tanner McLeod"
+            width={400}
+            height={400}
+            className="rounded-lg shadow-lg object-cover w-[400px] h-[400px]"
+            onError={(e) => {
+              const el = e.currentTarget as HTMLImageElement;
+              if (el.src !== PROFILE_PIC_FALLBACK) {
+                el.src = PROFILE_PIC_FALLBACK;
+              }
+            }}
+          />
         </div>
         <div className="md:col-span-3">
             <p className="text-lg text-slate-400 leading-relaxed">

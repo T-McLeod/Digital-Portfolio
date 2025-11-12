@@ -55,7 +55,7 @@ const Skills: React.FC = () => {
       {error && <div className="max-w-2xl mx-auto">{error}</div>}
       {!loading && !error && (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 md:gap-8">
-          {skills.map((skill) => (
+          {skills.slice(0, 8).map((skill) => (
             <SkillCard key={skill.id} skill={skill} />
           ))}
         </div>
