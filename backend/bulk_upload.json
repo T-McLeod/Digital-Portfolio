@@ -1,0 +1,35 @@
+{
+  "projects": [
+    {
+      "title": "Duke Soccer Analytics Dashboard",
+      "slug": "duke-soccer-analytics-dashboard",
+      "description": "Redesigned the Duke Womens soccer analytics dashboard, with a focus on reformed architecture and scalable code",
+      "long_description": "I partnered with the Duke Women's Soccer program to execute a critical overhaul of their proprietary analytics dashboard, which is essential for game planning, scouting, and player development. The existing system was hindered by extremely slow performance and severe limitations on data volume, impacting the coaching staff's ability to make data-driven decisions.\n\nOver the course of the year, I architected and implemented a complete system redesign using a modern, performance-focused tech stack. The transformation resulted in exponential scaling and significant speed improvements, fundamentally changing how the team uses data:\n\nMassive Data Expansion: I migrated the system from a limited 17-team database (ACC-only) to a robust PostgreSQL database encompassing 366 teams (all P4 plus mid-majors). This involved optimized indexing and relational design, enabling coaches to instantly analyze 20x more players across all Division 1 conferences.\n\n75% Speed Improvement: I rigorously optimized the Django RESTful API endpoints. Through advanced query optimization, strategic caching, and the introduction of auxiliary tables, I reduced average load times by 75%, allowing the system to scale from supporting one user to 20+ concurrent users during peak scouting periods.\n\nThe new, scalable architecture has established a foundation for future growth, with the analytics team now planning to market and sell the software solution to other athletic programs.",
+      "tags": [],
+      "image": {
+        "type": "url",
+        "value": "*place holder*"
+      },
+      "gallery_images": [],
+      "live_url": "",
+      "github_url": "",
+      "is_featured": true,
+      "is_ai_feature": false,
+      "order": 1,
+      "skills": [
+        {
+          "name": "Django",
+          "is_featured": true
+        },
+        {
+          "name": "React",
+          "is_featured": true
+        },
+        {
+          "name": "PostgreSQL",
+          "is_featured": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+name: NodeJS Build and Deploy to Pages
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # Focus on one stable Node version for deployment
+    strategy:
+      matrix:
+        node-version: [20.x] 
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies and Build
+        run: |
+          npm install
+          # Replace 'npx webpack' with your actual build command (e.g., 'npm run build')
+          npm run build 
+
+      - name: Ensure CNAME file for GitHub Pages
+        # Write the custom domain into the publish directory so it persists
+        # NOTE: Add a repo secret named CUSTOM_DOMAIN with value like "example.com"
+        run: |
+          if [ -n "${{ secrets.CUSTOM_DOMAIN }}" ]; then
+            mkdir -p ./dist
+            echo "${{ secrets.CUSTOM_DOMAIN }}" > ./dist/CNAME
+            echo "Wrote CNAME: ${{ secrets.CUSTOM_DOMAIN }}"
+          else
+            echo "No CUSTOM_DOMAIN secret set; skipping CNAME creation."
+          fi
+
+      - name: Deploy to GitHub Pages Repository
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.DEPLOY_TOKEN }}
+          external_repository: T-McLeod/T-McLeod.github.io 
+          publish_branch: main 
+          publish_dir: ./dist 
+          cname: ${{ secrets.CUSTOM_DOMAIN }}
+          commit_message: ${{ github.event.head_commit.message }} (Deployed via GitHub Actions)

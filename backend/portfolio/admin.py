@@ -38,7 +38,9 @@ class ProjectAdmin(admin.ModelAdmin):
     list_display = ["id", "title", "is_featured", "is_ai_feature", "order", "main_image_preview"]
     list_filter = ["is_featured", "is_ai_feature"]
     search_fields = ["title", "description"]
-    list_editable = ["order", "is_featured"]
+    # Make `id` the clickable link and allow editing title/is_ai_feature inline
+    list_display_links = ["title"]
+    list_editable = ["order", "is_featured", "is_ai_feature"]
     prepopulated_fields = {"slug": ("title",)}
     inlines = [ProjectSkillInline, GalleryImageInline]
     
