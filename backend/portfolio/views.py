@@ -7,9 +7,20 @@ from .serializers import SkillSerializer, ProjectListSerializer, ProjectDetailSe
 
 
 class SkillViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Skill.objects.all()
     serializer_class = SkillSerializer
     permission_classes = [AllowAny]
+    
+    def get_queryset(self):
+        """Filter to featured skills by default on list view"""
+        queryset = Skill.objects.all()
+        
+        if self.action == "list":
+            # Check if we should show all skills or just featured
+            show_all = self.request.query_params.get("all", "false").lower() == "true"
+            if not show_all:
+                queryset = queryset.filter(is_featured=True)
+        
+        return queryset
 
 
 class ProjectViewSet(viewsets.ReadOnlyModelViewSet):

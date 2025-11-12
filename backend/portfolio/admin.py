@@ -5,8 +5,9 @@ from .models import Skill, Project, Experience, ProjectSkill, GalleryImage
 
 @admin.register(Skill)
 class SkillAdmin(admin.ModelAdmin):
-    list_display = ["id", "name"]
+    list_display = ["id", "name", "order", "is_featured"]
     search_fields = ["name"]
+    list_editable = ["order", "is_featured"]
 
 
 class ProjectSkillInline(admin.TabularInline):

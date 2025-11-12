@@ -4,10 +4,12 @@
 class Skill(models.Model):
     name = models.CharField(max_length=100)
     svg_icon = models.TextField(help_text="SVG markup for the skill icon")
+    order = models.IntegerField(default=0, help_text="Display order (lower numbers first)")
+    is_featured = models.BooleanField(default=True, help_text="Show in general skills list")
     
     class Meta:
-        ordering = ["name"]
-    
+        ordering = ["order", "name"]
+        
     def __str__(self):
         return self.name
 
