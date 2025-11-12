@@ -1,5 +1,5 @@
 // Local (public/) paths - place your images in the project's `public/assets/` folder.
-export const PROFILE_PIC_LOCAL = '/assets/Fullshot.jpeg';
+export const PROFILE_PIC_LOCAL = '/assets/Fullshot.jpg';
 export const HERO_PORTRAIT_LOCAL = '/assets/Headshot.jpg';
 
 // Fallback remote images (used if local files aren't present)
