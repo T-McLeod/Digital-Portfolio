@@ -100,27 +100,9 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
                 images.append(request.build_absolute_uri(img.image.url))
             else:
                 images.append(url)
-        # Build absolute URIs for any uploaded images
-        request = self.context.get('request') if hasattr(self, 'context') else None
-        images = []
-        for img in gallery_objects:
-            url = img.get_image_url()
-            if not url:
-                continue
-            # img.get_image_url() returns a relative path for uploaded files
-            if img.image and request is not None:
-                images.append(request.build_absolute_uri(img.image.url))
-            else:
-                images.append(url)
         
         # If no gallery objects exist, fall back to legacy gallery_images JSON field
         if not images and hasattr(obj, 'gallery_images') and obj.gallery_images:
-            # legacy gallery_images may already include absolute URLs or relative
-            # paths; if relative and we have a request, make them absolute.
-            if request is not None:
-                images = [request.build_absolute_uri(u) if u.startswith('/') else u for u in obj.gallery_images]
-            else:
-                images = obj.gallery_images
             # legacy gallery_images may already include absolute URLs or relative
             # paths; if relative and we have a request, make them absolute.
             if request is not None:
