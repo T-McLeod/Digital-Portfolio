@@ -37,6 +37,9 @@ class ProjectListSerializer(serializers.ModelSerializer):
     
     def get_imageUrl(self, obj):
         """Return uploaded image URL if exists, otherwise external URL"""
+        # Use request context to build an absolute URI so frontend can load
+        # media from the backend host instead of resolving relative to the
+        # frontend origin.
         request = self.context.get('request') if hasattr(self, 'context') else None
         if obj.image:
             if request is not None:
@@ -71,6 +74,9 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
     
     def get_imageUrl(self, obj):
         """Return uploaded image URL if exists, otherwise external URL"""
+        # Use request context to build an absolute URI so frontend can load
+        # media from the backend host instead of resolving relative to the
+        # frontend origin.
         request = self.context.get('request') if hasattr(self, 'context') else None
         if obj.image:
             if request is not None:
