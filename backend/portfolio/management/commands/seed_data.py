@@ -91,8 +91,6 @@ The application handles thousands of concurrent users and processes hundreds of 
                     'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=1200&q=80',
                     'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80'
                 ],
-                'live_url': 'https://example.com/ecommerce',
-                'github_url': 'https://github.com/example/ecommerce',
                 'is_featured': True,
                 'is_ai_feature': False,
                 'order': 1,
@@ -126,8 +124,6 @@ The application has helped thousands of users improve their job applications and
                     'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80',
                     'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=1200&q=80'
                 ],
-                'live_url': '',
-                'github_url': '',
                 'is_featured': True,
                 'is_ai_feature': True,
                 'order': 2,
@@ -164,8 +160,6 @@ The platform serves teams of all sizes, from small startups to enterprise organi
                     'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1200&q=80',
                     'https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=1200&q=80'
                 ],
-                'live_url': 'https://example.com/taskmanager',
-                'github_url': 'https://github.com/example/taskmanager',
                 'is_featured': True,
                 'is_ai_feature': False,
                 'order': 3,
@@ -204,8 +198,6 @@ Built with Python for backend processing, Docker for containerization, and React
                     'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1200&q=80',
                     'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&q=80'
                 ],
-                'live_url': 'https://example.com/devops',
-                'github_url': 'https://github.com/example/devops',
                 'is_featured': False,
                 'is_ai_feature': False,
                 'order': 4,

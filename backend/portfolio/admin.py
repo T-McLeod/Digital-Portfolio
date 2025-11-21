@@ -1,6 +1,6 @@
 ﻿from django.contrib import admin
 from django.utils.html import format_html
-from .models import Skill, Project, Experience, ProjectSkill, GalleryImage
+from .models import Skill, Project, Experience, ProjectSkill, GalleryImage, ProjectLink
 
 
 @admin.register(Skill)
@@ -15,6 +15,12 @@ class ProjectSkillInline(admin.TabularInline):
     model = ProjectSkill
     extra = 1
     autocomplete_fields = ["skill"]
+
+
+class ProjectLinkInline(admin.TabularInline):
+    model = ProjectLink
+    extra = 1
+    fields = ["display_name", "url", "svg_icon", "order"]
 
 
 class GalleryImageInline(admin.TabularInline):
@@ -42,7 +48,7 @@ class ProjectAdmin(admin.ModelAdmin):
     list_display_links = ["title"]
     list_editable = ["order", "is_featured", "is_ai_feature"]
     prepopulated_fields = {"slug": ("title",)}
-    inlines = [ProjectSkillInline, GalleryImageInline]
+    inlines = [ProjectSkillInline, ProjectLinkInline, GalleryImageInline]
     
     fieldsets = (
         (None, {
@@ -51,9 +57,6 @@ class ProjectAdmin(admin.ModelAdmin):
         ("Main Image", {
             "fields": ("image", "image_url", "main_image_display"),
             "description": "Upload an image OR provide a URL. Upload takes priority."
-        }),
-        ("Links", {
-            "fields": ("live_url", "github_url")
         }),
         ("Settings", {
             "fields": ("tags", "is_featured", "is_ai_feature", "order")

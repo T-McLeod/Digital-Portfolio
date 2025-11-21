@@ -1,5 +1,5 @@
 ﻿from rest_framework import serializers
-from .models import Skill, Project, Experience, ProjectSkill, GalleryImage
+from .models import Skill, Project, Experience, ProjectSkill, ProjectLink
 
 
 class SkillSerializer(serializers.ModelSerializer):
@@ -22,18 +22,27 @@ class ProjectSkillSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "svgIcon", "isFeatured"]
 
 
+class ProjectLinkSerializer(serializers.ModelSerializer):
+    """Serializer for project links"""
+    displayName = serializers.CharField(source="display_name")
+    svgIcon = serializers.CharField(source="svg_icon", allow_blank=True, required=False)
+    
+    class Meta:
+        model = ProjectLink
+        fields = ["id", "displayName", "url", "svgIcon", "order"]
+
+
 class ProjectListSerializer(serializers.ModelSerializer):
     """Serializer for project list view (home page) - only featured skills"""
     imageUrl = serializers.SerializerMethodField()
-    liveUrl = serializers.URLField(source="live_url", allow_blank=True)
-    githubUrl = serializers.URLField(source="github_url", allow_blank=True)
     isAiFeature = serializers.BooleanField(source="is_ai_feature")
     isFeatured = serializers.BooleanField(source="is_featured")
     skills = serializers.SerializerMethodField()
+    links = ProjectLinkSerializer(many=True, read_only=True)
     
     class Meta:
         model = Project
-        fields = ["id", "title", "description", "tags", "imageUrl", "liveUrl", "githubUrl", "isAiFeature", "isFeatured", "skills", "slug"]
+        fields = ["id", "title", "description", "tags", "imageUrl", "isAiFeature", "isFeatured", "skills", "links", "slug"]
     
     def get_imageUrl(self, obj):
         """Return uploaded image URL if exists, otherwise external URL"""
@@ -58,18 +67,17 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
     imageUrl = serializers.SerializerMethodField()
     galleryImages = serializers.SerializerMethodField()
     longDescription = serializers.CharField(source="long_description")
-    liveUrl = serializers.URLField(source="live_url", allow_blank=True)
-    githubUrl = serializers.URLField(source="github_url", allow_blank=True)
     isAiFeature = serializers.BooleanField(source="is_ai_feature")
     isFeatured = serializers.BooleanField(source="is_featured")
     skills = serializers.SerializerMethodField()
+    links = ProjectLinkSerializer(many=True, read_only=True)
     
     class Meta:
         model = Project
         fields = [
             "id", "title", "description", "longDescription", "tags", 
-            "imageUrl", "galleryImages", "liveUrl", "githubUrl", 
-            "isAiFeature", "isFeatured", "skills", "slug"
+            "imageUrl", "galleryImages",
+            "isAiFeature", "isFeatured", "skills", "links", "slug"
         ]
     
     def get_imageUrl(self, obj):

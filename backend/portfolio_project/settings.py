@@ -178,8 +178,6 @@ CSRF_TRUSTED_ORIGINS = os.getenv(
     'CSRF_TRUSTED_ORIGINS'
 ).split(',')
 
-print("CSRF_TRUSTED_ORIGINS:", CSRF_TRUSTED_ORIGINS)
-
 # When running behind a TLS-terminating proxy (host nginx), tell Django
 # to trust the X-Forwarded-Proto header so it knows the original request
 # scheme. nginx is already configured to set X-Forwarded-Proto.
