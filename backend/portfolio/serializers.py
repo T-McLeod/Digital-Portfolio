@@ -1,5 +1,5 @@
 ﻿from rest_framework import serializers
-from .models import Skill, Project, Experience, ProjectSkill, GalleryImage, ProjectLink
+from .models import Skill, Project, Experience, ProjectSkill, ProjectLink
 
 
 class SkillSerializer(serializers.ModelSerializer):
