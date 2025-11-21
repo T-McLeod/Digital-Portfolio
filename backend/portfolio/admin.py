@@ -20,7 +20,7 @@ class ProjectSkillInline(admin.TabularInline):
 class ProjectLinkInline(admin.TabularInline):
     model = ProjectLink
     extra = 1
-    fields = ["display_name", "url", "order"]
+    fields = ["display_name", "url", "svg_icon", "order"]
 
 
 class GalleryImageInline(admin.TabularInline):

@@ -33,6 +33,7 @@ class ProjectLink(models.Model):
     project = models.ForeignKey("Project", on_delete=models.CASCADE, related_name='links')
     display_name = models.CharField(max_length=100, help_text="e.g., 'Live Site', 'GitHub', 'Documentation'")
     url = models.URLField(max_length=500)
+    svg_icon = models.TextField(blank=True, help_text="SVG markup for the link icon")
     order = models.IntegerField(default=0, help_text="Display order")
     
     class Meta:
@@ -52,8 +53,10 @@ class Project(models.Model):
     image = models.ImageField(upload_to='projects/', blank=True, null=True, help_text="Upload main project image")
     image_url = models.URLField(max_length=500, blank=True, help_text="Or provide image URL (used if no upload)")
     
-    live_url = models.URLField(max_length=500, blank=True, null=True)
-    github_url = models.URLField(max_length=500, blank=True, null=True)
+    # Legacy URL fields (use ProjectLink for new projects)
+    live_url = models.URLField(max_length=500, blank=True, null=True, help_text="URL to live project")
+    github_url = models.URLField(max_length=500, blank=True, null=True, help_text="URL to GitHub repository")
+    
     is_ai_feature = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=True, help_text="Show on home page")
     skills = models.ManyToManyField(Skill, through=ProjectSkill, related_name="projects", blank=True)

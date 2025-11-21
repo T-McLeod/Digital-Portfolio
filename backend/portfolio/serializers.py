@@ -25,10 +25,11 @@ class ProjectSkillSerializer(serializers.ModelSerializer):
 class ProjectLinkSerializer(serializers.ModelSerializer):
     """Serializer for project links"""
     displayName = serializers.CharField(source="display_name")
+    svgIcon = serializers.CharField(source="svg_icon", allow_blank=True)
     
     class Meta:
         model = ProjectLink
-        fields = ["id", "displayName", "url", "order"]
+        fields = ["id", "displayName", "url", "svgIcon", "order"]
 
 
 class ProjectListSerializer(serializers.ModelSerializer):
