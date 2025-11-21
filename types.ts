@@ -15,11 +15,18 @@ export interface Project {
   tags: string[];
   imageUrl: string;
   galleryImages?: string[]; // Only on detail view
-  liveUrl?: string;
-  githubUrl?: string;
   isFeatured: boolean;
   isAiFeature?: boolean;
+  links?: ProjectLink[]; // Only on detail view
   skills?: Skill[]; // Featured skills on list, all skills on detail
+}
+
+export interface ProjectLink {
+  id: number;
+  displayName: string;
+  url: string;
+  svgIcon?: string;
+  order?: number;
 }
 
 export interface ExperienceItem {
