@@ -1,5 +1,5 @@
 ﻿from rest_framework import serializers
-from .models import Skill, Project, Experience, ProjectSkill, GalleryImage
+from .models import Skill, Project, Experience, ProjectSkill, GalleryImage, ProjectLink
 
 
 class SkillSerializer(serializers.ModelSerializer):
@@ -22,6 +22,15 @@ class ProjectSkillSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "svgIcon", "isFeatured"]
 
 
+class ProjectLinkSerializer(serializers.ModelSerializer):
+    """Serializer for project links"""
+    displayName = serializers.CharField(source="display_name")
+    
+    class Meta:
+        model = ProjectLink
+        fields = ["id", "displayName", "url", "order"]
+
+
 class ProjectListSerializer(serializers.ModelSerializer):
     """Serializer for project list view (home page) - only featured skills"""
     imageUrl = serializers.SerializerMethodField()
@@ -30,10 +39,11 @@ class ProjectListSerializer(serializers.ModelSerializer):
     isAiFeature = serializers.BooleanField(source="is_ai_feature")
     isFeatured = serializers.BooleanField(source="is_featured")
     skills = serializers.SerializerMethodField()
+    links = ProjectLinkSerializer(many=True, read_only=True)
     
     class Meta:
         model = Project
-        fields = ["id", "title", "description", "tags", "imageUrl", "liveUrl", "githubUrl", "isAiFeature", "isFeatured", "skills", "slug"]
+        fields = ["id", "title", "description", "tags", "imageUrl", "liveUrl", "githubUrl", "isAiFeature", "isFeatured", "skills", "links", "slug"]
     
     def get_imageUrl(self, obj):
         """Return uploaded image URL if exists, otherwise external URL"""
@@ -63,13 +73,14 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
     isAiFeature = serializers.BooleanField(source="is_ai_feature")
     isFeatured = serializers.BooleanField(source="is_featured")
     skills = serializers.SerializerMethodField()
+    links = ProjectLinkSerializer(many=True, read_only=True)
     
     class Meta:
         model = Project
         fields = [
             "id", "title", "description", "longDescription", "tags", 
             "imageUrl", "galleryImages", "liveUrl", "githubUrl", 
-            "isAiFeature", "isFeatured", "skills", "slug"
+            "isAiFeature", "isFeatured", "skills", "links", "slug"
         ]
     
     def get_imageUrl(self, obj):
