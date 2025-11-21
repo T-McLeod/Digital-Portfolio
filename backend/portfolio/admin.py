@@ -58,9 +58,6 @@ class ProjectAdmin(admin.ModelAdmin):
             "fields": ("image", "image_url", "main_image_display"),
             "description": "Upload an image OR provide a URL. Upload takes priority."
         }),
-        ("Links", {
-            "fields": ("live_url", "github_url")
-        }),
         ("Settings", {
             "fields": ("tags", "is_featured", "is_ai_feature", "order")
         }),

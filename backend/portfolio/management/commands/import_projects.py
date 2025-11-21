@@ -150,8 +150,6 @@ class Command(BaseCommand):
             'description': project_data.get('description', ''),
             'long_description': project_data.get('long_description', ''),
             'tags': project_data.get('tags', []),
-            'live_url': project_data.get('live_url', ''),
-            'github_url': project_data.get('github_url', ''),
             'is_ai_feature': project_data.get('is_ai_feature', False),
             'is_featured': project_data.get('is_featured', True),
             'order': project_data.get('order', 0),

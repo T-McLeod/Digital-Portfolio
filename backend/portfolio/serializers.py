@@ -35,8 +35,6 @@ class ProjectLinkSerializer(serializers.ModelSerializer):
 class ProjectListSerializer(serializers.ModelSerializer):
     """Serializer for project list view (home page) - only featured skills"""
     imageUrl = serializers.SerializerMethodField()
-    liveUrl = serializers.URLField(source="live_url", allow_blank=True)
-    githubUrl = serializers.URLField(source="github_url", allow_blank=True)
     isAiFeature = serializers.BooleanField(source="is_ai_feature")
     isFeatured = serializers.BooleanField(source="is_featured")
     skills = serializers.SerializerMethodField()
@@ -44,7 +42,7 @@ class ProjectListSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Project
-        fields = ["id", "title", "description", "tags", "imageUrl", "liveUrl", "githubUrl", "isAiFeature", "isFeatured", "skills", "links", "slug"]
+        fields = ["id", "title", "description", "tags", "imageUrl", "isAiFeature", "isFeatured", "skills", "links", "slug"]
     
     def get_imageUrl(self, obj):
         """Return uploaded image URL if exists, otherwise external URL"""
@@ -69,8 +67,6 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
     imageUrl = serializers.SerializerMethodField()
     galleryImages = serializers.SerializerMethodField()
     longDescription = serializers.CharField(source="long_description")
-    liveUrl = serializers.URLField(source="live_url", allow_blank=True)
-    githubUrl = serializers.URLField(source="github_url", allow_blank=True)
     isAiFeature = serializers.BooleanField(source="is_ai_feature")
     isFeatured = serializers.BooleanField(source="is_featured")
     skills = serializers.SerializerMethodField()
@@ -80,7 +76,7 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
         model = Project
         fields = [
             "id", "title", "description", "longDescription", "tags", 
-            "imageUrl", "galleryImages", "liveUrl", "githubUrl", 
+            "imageUrl", "galleryImages",
             "isAiFeature", "isFeatured", "skills", "links", "slug"
         ]
     

@@ -53,10 +53,6 @@ class Project(models.Model):
     image = models.ImageField(upload_to='projects/', blank=True, null=True, help_text="Upload main project image")
     image_url = models.URLField(max_length=500, blank=True, help_text="Or provide image URL (used if no upload)")
     
-    # Legacy URL fields (use ProjectLink for new projects)
-    live_url = models.URLField(max_length=500, blank=True, null=True, help_text="URL to live project")
-    github_url = models.URLField(max_length=500, blank=True, null=True, help_text="URL to GitHub repository")
-    
     is_ai_feature = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=True, help_text="Show on home page")
     skills = models.ManyToManyField(Skill, through=ProjectSkill, related_name="projects", blank=True)
