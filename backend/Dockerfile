@@ -37,7 +37,7 @@ EXPOSE 8000
 
 # Create entrypoint script
 COPY docker-entrypoint.sh /app/
-RUN chmod +x /app/docker-entrypoint.sh
+RUN sed -i 's/\r$//' /app/docker-entrypoint.sh && chmod +x /app/docker-entrypoint.sh
 
 # Run entrypoint script
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
